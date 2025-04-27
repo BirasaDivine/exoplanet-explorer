@@ -29,6 +29,14 @@ Instructions:
    * @return {Promise}    - A Promise that resolves when the XHR succeeds and fails otherwise.
    */
   function get(url) {
+    return fetch(url)
+    .then(function(response){
+      if(!response.ok){
+        throw new Error( `HTTP ERROR ${response.status}`)
+      }else{
+        return response
+      }
+    })
     /*
     Use the Fetch API to GET a URL.
     Return the fetch.
@@ -43,6 +51,10 @@ Instructions:
    * @return {Promise}    - A promise that passes the parsed JSON response.
    */
   function getJSON(url) {
+    return get(url)
+    .then(function(response){
+      return response.json()
+    })
     /*
     Return a Promise that gets a URL and parses the JSON response. Use your get method!
 
@@ -58,6 +70,13 @@ Instructions:
 
     Your code goes here too!
      */
-    // getJSON('../data/earth-like-results.json')
+     getJSON('../data/earth-like-results.json')
+     .then(function(response){
+      console.log(response) 
+      addSearchHeader(response.query);
+     })
+     .catch(function(error){
+      addSearchHeader('unknown')
+     })
   });
 })(document);
